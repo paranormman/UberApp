@@ -4,9 +4,13 @@ import com.vestachrono.project.uber.uberApp.dto.DriverDto;
 import com.vestachrono.project.uber.uberApp.dto.RideDto;
 import com.vestachrono.project.uber.uberApp.dto.RideRequestDto;
 import com.vestachrono.project.uber.uberApp.dto.RiderDto;
+import com.vestachrono.project.uber.uberApp.entities.Ride;
 import com.vestachrono.project.uber.uberApp.entities.RideRequest;
+import com.vestachrono.project.uber.uberApp.entities.Rider;
+import com.vestachrono.project.uber.uberApp.entities.User;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.vestachrono.project.uber.uberApp.repositories.RideRequestRepository;
+import com.vestachrono.project.uber.uberApp.repositories.RiderRepository;
 import com.vestachrono.project.uber.uberApp.services.RiderService;
 import com.vestachrono.project.uber.uberApp.strategies.DriverMatchingStrategy;
 import com.vestachrono.project.uber.uberApp.strategies.RideFareCalculationStrategy;
@@ -26,6 +30,7 @@ public class RiderServiceImpl implements RiderService {
     private final RideFareCalculationStrategy rideFareCalculationStrategy;
     private final DriverMatchingStrategy driverMatchingStrategy;
     private final RideRequestRepository riderRequestRepository;
+    private final RiderRepository riderRepository;
 
     @Override
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
@@ -60,5 +65,15 @@ public class RiderServiceImpl implements RiderService {
     @Override
     public List<RideDto> getAllMyRides() {
         return List.of();
+    }
+
+    @Override
+    public Rider CreateNewRider(User user) {
+        Rider rider = Rider
+                .builder()
+                .user(user)
+                .rating(0.0)
+                .build();
+        return riderRepository.save(rider);
     }
 }

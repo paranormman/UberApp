@@ -17,8 +17,7 @@ public class DriverMatchingNearestDriverStrategy implements DriverMatchingStrate
     private final DriverRepository driverRepository;
 
     @Override
-    public List<Driver> findMatchingDrivers(RideRequest rideRequest) {
-
-        return driverRepository.findMatchingDrivers(rideRequest.getPickupLocation());
+    public List<Driver> findMatchingDriver(RideRequest rideRequest) {
+        return driverRepository.findTenNearestDrivers(rideRequest.getPickupLocation());
     }
 }

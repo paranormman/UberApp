@@ -3,7 +3,6 @@ package com.vestachrono.project.uber.uberApp.services.Implementation;
 import com.vestachrono.project.uber.uberApp.dto.DriverDto;
 import com.vestachrono.project.uber.uberApp.dto.SignupDto;
 import com.vestachrono.project.uber.uberApp.dto.UserDto;
-import com.vestachrono.project.uber.uberApp.entities.Rider;
 import com.vestachrono.project.uber.uberApp.entities.User;
 import com.vestachrono.project.uber.uberApp.entities.enums.Role;
 import com.vestachrono.project.uber.uberApp.exceptions.RuntimeConflictException;
@@ -13,6 +12,7 @@ import com.vestachrono.project.uber.uberApp.services.RiderService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -30,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public UserDto signup(SignupDto signupDto) {
         User user = userRepository.findByEmail(signupDto.getEmail()).orElse(null);
         if (user != null) {
@@ -41,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(mappedUser);
 
 //        Create user related entities
-        riderService.CreateNewRider(savedUser);
+        riderService.createNewRider(savedUser);
 
 //        TODO add Wallet related service here
 

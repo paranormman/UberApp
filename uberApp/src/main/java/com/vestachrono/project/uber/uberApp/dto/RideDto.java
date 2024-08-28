@@ -1,15 +1,11 @@
 package com.vestachrono.project.uber.uberApp.dto;
 
-import com.vestachrono.project.uber.uberApp.entities.Driver;
-import com.vestachrono.project.uber.uberApp.entities.Rider;
 import com.vestachrono.project.uber.uberApp.entities.enums.PaymentMethod;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
@@ -21,9 +17,9 @@ public class RideDto {
 
     private Long id;
 
-    private Point pickupLocation;
+    private PointDto pickupLocation;
 
-    private Point dropOffLocation;
+    private PointDto dropOffLocation;
 
     private LocalDateTime createdTime;
 

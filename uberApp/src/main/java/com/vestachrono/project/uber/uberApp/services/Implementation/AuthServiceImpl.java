@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User mappedUser = modelMapper.map(signupDto, User.class);
-        mappedUser.setRoles(Set.of(Role.RIDERS));
+        mappedUser.setRoles(Set.of(Role.RIDER));
         User savedUser = userRepository.save(mappedUser);
 
 //        Create user related entities

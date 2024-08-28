@@ -1,7 +1,6 @@
 package com.vestachrono.project.uber.uberApp.controllers;
 
 import com.vestachrono.project.uber.uberApp.dto.RideRequestDto;
-import com.vestachrono.project.uber.uberApp.entities.RideRequest;
 import com.vestachrono.project.uber.uberApp.services.RiderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

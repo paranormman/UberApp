@@ -1,6 +1,5 @@
 package com.vestachrono.project.uber.uberApp.entities;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 

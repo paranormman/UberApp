@@ -2,7 +2,6 @@ package com.vestachrono.project.uber.uberApp.advices;
 
 import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException;
 import com.vestachrono.project.uber.uberApp.exceptions.RuntimeConflictException;
-import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

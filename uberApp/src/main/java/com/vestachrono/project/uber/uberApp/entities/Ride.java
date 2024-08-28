@@ -4,7 +4,10 @@ import com.vestachrono.project.uber.uberApp.entities.enums.PaymentMethod;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
 

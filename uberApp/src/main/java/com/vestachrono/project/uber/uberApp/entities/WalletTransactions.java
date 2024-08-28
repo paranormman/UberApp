@@ -4,8 +4,6 @@ import com.vestachrono.project.uber.uberApp.entities.enums.TransactionMethod;
 import com.vestachrono.project.uber.uberApp.entities.enums.TransactionType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 import java.time.LocalDateTime;
 

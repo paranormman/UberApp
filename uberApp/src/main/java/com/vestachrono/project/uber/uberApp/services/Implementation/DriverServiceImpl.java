@@ -10,6 +10,7 @@ import com.vestachrono.project.uber.uberApp.entities.enums.RideStatus;
 import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException;
 import com.vestachrono.project.uber.uberApp.repositories.DriverRepository;
 import com.vestachrono.project.uber.uberApp.services.DriverService;
+import com.vestachrono.project.uber.uberApp.services.PaymentService;
 import com.vestachrono.project.uber.uberApp.services.RideRequestService;
 import com.vestachrono.project.uber.uberApp.services.RideService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
     private final RideService rideService;
     private final ModelMapper modelMapper;
+    private final PaymentService paymentService;
 
     @Override
     @Transactional
@@ -77,6 +79,10 @@ public class DriverServiceImpl implements DriverService {
 //        Change the status to ONGOING to indicate the ride is started by creating a saveRide object
         ride.setStartedAt(LocalDateTime.now());
         Ride savedRide = rideService.updateRideStatus(ride, RideStatus.ONGOING);
+
+//        Create a payment object
+        paymentService.createNewPayment(savedRide);
+
 //        return the ride profile by mapping it to RideDto
         return modelMapper.map(savedRide, RideDto.class);
 
@@ -107,7 +113,30 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public RideDto endRide(Long rideId) {
-        return null;
+//        get ride details
+        Ride ride = rideService.getRideById(rideId);
+//        get Driver details
+        Driver driver = getCurrentDriver();
+//        check if driver owns the ride
+        if (!driver.equals(ride.getDriver())) {
+            throw new RuntimeException("Driver cannot END the ride as he has not started the ride");
+        }
+//        check if ride is Ongoing(started) only end when ongoing
+        if (!ride.getRideStatus().equals(RideStatus.ONGOING)) {
+            throw new RuntimeException("Ride cannot be ended, Invalid status "+ride.getRideStatus());
+        }
+//        update the endTime
+        ride.setEndedAt(LocalDateTime.now());
+//        update the ride status to ENDED
+        Ride savedRide = rideService.updateRideStatus(ride, RideStatus.ENDED);
+//        free the driver by updating driver availability to true
+        updateDriverAvailability(driver, true);
+
+//        process the payment for this ride
+        paymentService.processPayment(ride);
+
+//        return the ride profile by mapping it to RideDto
+        return modelMapper.map(savedRide, RideDto.class);
     }
 
     @Override
@@ -129,7 +158,7 @@ public class DriverServiceImpl implements DriverService {
         Driver currentDriver = getCurrentDriver();
 /*        get the metadata of the rides the driver made and return it as a RideDto as a pageable form
 *         use map function to convert from one page to another */
-        return rideService.getAllRidersOfDriver(currentDriver.getId(), pageRequest).map(
+        return rideService.getAllRidersOfDriver(currentDriver, pageRequest).map(
                 ride -> modelMapper.map(ride, RideDto.class)
         );
     }

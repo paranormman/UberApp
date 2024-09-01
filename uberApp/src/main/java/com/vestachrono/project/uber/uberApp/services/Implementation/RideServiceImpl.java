@@ -4,6 +4,7 @@ import com.vestachrono.project.uber.uberApp.dto.RideRequestDto;
 import com.vestachrono.project.uber.uberApp.entities.Driver;
 import com.vestachrono.project.uber.uberApp.entities.Ride;
 import com.vestachrono.project.uber.uberApp.entities.RideRequest;
+import com.vestachrono.project.uber.uberApp.entities.Rider;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideStatus;
 import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException;
@@ -55,13 +56,13 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public Page<Ride> getAllRidesOfRider(Long riderId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest) {
+        return rideRepository.findByRider(rider, pageRequest);
     }
 
     @Override
-    public Page<Ride> getAllRidersOfDriver(Long driverId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidersOfDriver(Driver driver, PageRequest pageRequest) {
+        return rideRepository.findByDriver(driver, pageRequest);
     }
 
     private String generateRandomOTP() {

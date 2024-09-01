@@ -104,7 +104,7 @@ public class RiderServiceImpl implements RiderService {
         Rider currentRider = getCurrentRider();
 /*        get the metadata of the rides the driver made and return it as a RideDto as a pageable form
 *         use map function to convert from one page to another */
-        return rideService.getAllRidesOfRider(currentRider.getId(), pageRequest).map(
+        return rideService.getAllRidesOfRider(currentRider, pageRequest).map(
                 ride -> modelMapper.map(ride, RideDto.class)
         );
     }

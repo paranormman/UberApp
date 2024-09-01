@@ -154,3 +154,7 @@ INSERT INTO driver (id, user_id, rating, available, current_location) VALUES
 (28, 28, 4.2, false, ST_GeomFromText('POINT(77.6992 12.9782)', 4326)), -- Near Mahadevapura
 (29, 29, 3.7, true, ST_GeomFromText('POINT(77.6650 12.9251)', 4326)),  -- Near Bellandur
 (30, 30, 4.4, true, ST_GeomFromText('POINT(77.7506 12.9646)', 4326));  -- Near KR Puram
+
+INSERT INTO wallet (id, user_id, balance) VALUES
+(1, 1, 100),
+(2, 2, 500);

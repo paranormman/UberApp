@@ -1,17 +1,23 @@
-package com.vestachrono.project.uber.uberApp.entities;
+package com.vestachrono.project.uber.uberApp.dto;
 
+import com.vestachrono.project.uber.uberApp.entities.Ride;
+import com.vestachrono.project.uber.uberApp.entities.Wallet;
 import com.vestachrono.project.uber.uberApp.entities.enums.TransactionMethod;
 import com.vestachrono.project.uber.uberApp.entities.enums.TransactionType;
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity
-public class WalletTransactions {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class WalletTransactionDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Double amount;
@@ -20,16 +26,12 @@ public class WalletTransactions {
 
     private TransactionMethod transactionMethod;
 
-    @OneToOne
     private Ride ride;
 
     private String transactionId;
 
-    @ManyToOne
-    private Wallet wallet;
+    private WalletDto wallet;
 
-    @CreationTimestamp
     private LocalDateTime timeStamp;
-
 
 }

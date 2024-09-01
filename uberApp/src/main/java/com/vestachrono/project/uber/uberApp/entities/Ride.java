@@ -42,9 +42,6 @@ public class Ride {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    @Enumerated(EnumType.STRING)
-    private RideRequestStatus rideRequestStatus;
-
     @Enumerated
     private RideStatus rideStatus;
 

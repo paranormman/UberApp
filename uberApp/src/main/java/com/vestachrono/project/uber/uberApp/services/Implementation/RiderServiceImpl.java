@@ -11,6 +11,7 @@ import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException
 import com.vestachrono.project.uber.uberApp.repositories.RideRequestRepository;
 import com.vestachrono.project.uber.uberApp.repositories.RiderRepository;
 import com.vestachrono.project.uber.uberApp.services.DriverService;
+import com.vestachrono.project.uber.uberApp.services.RatingService;
 import com.vestachrono.project.uber.uberApp.services.RideService;
 import com.vestachrono.project.uber.uberApp.services.RiderService;
 import com.vestachrono.project.uber.uberApp.strategies.RideStrategyManager;
@@ -35,6 +36,7 @@ public class RiderServiceImpl implements RiderService {
     private final RiderRepository riderRepository;
     private final RideService rideService;
     private final DriverService driverService;
+    private final RatingService ratingService;
 
     @Override
     @Transactional
@@ -87,7 +89,20 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public DriverDto rateDriver(Long rideId, Integer rating) {
-        return null;
+//        get the ride
+        Ride ride = rideService.getRideById(rideId);
+//        get the current rider
+        Rider rider = getCurrentRider();
+//        check if the rider owns the ride
+        if (!rider.equals(ride.getRider())) {
+            throw new RuntimeException("Rider is not the owner of the ride ");
+        }
+//        check if the ride status is ended
+        if (!ride.getRideStatus().equals(RideStatus.ENDED)) {
+            throw new RuntimeException("Ride status is not ended, cannot rate the driver "+ride.getRideStatus());
+        }
+//        provide rating to the driver
+        return ratingService.rateDriver(ride, rating);
     }
 
     @Override

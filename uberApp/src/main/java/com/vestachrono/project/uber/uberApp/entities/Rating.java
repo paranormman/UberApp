@@ -8,14 +8,26 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Table(indexes = {
+        @Index(name = "idx_rating_rider", columnList = "rider_id"),
+        @Index(name = "idx_rating_driver", columnList = "driver_id")
+})
 public class Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
+    @OneToOne
+    private Ride ride;
 
-    private double rating;
+    @ManyToOne
+    private Rider rider;
+
+    @ManyToOne
+    private Driver driver;
+
+    private Integer riderRating; //rating the rider
+    private Integer driverRating; //rating the driver
 }

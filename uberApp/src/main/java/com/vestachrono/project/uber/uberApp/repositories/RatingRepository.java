@@ -1,17 +1,20 @@
 package com.vestachrono.project.uber.uberApp.repositories;
 
+import com.vestachrono.project.uber.uberApp.entities.Driver;
 import com.vestachrono.project.uber.uberApp.entities.Rating;
+import com.vestachrono.project.uber.uberApp.entities.Ride;
+import com.vestachrono.project.uber.uberApp.entities.Rider;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
+    List<Rating> findByRider(Rider rider);
 
-//    @Query(value = "SELECT COUNT(r) FROM Rating r WHERE r.user.id", nativeQuery = true)
-//    int countRatingsByUserId(Long userId);
-//
-//    @Query(value = "SELECT AVG(r.rating) FROM Rating r WHERE r.user.id", nativeQuery = true)
-//    double avgRatingsByUserId(Long userId);
+    List<Rating> findByDriver(Driver driver);
 
+    Optional<Rating> findByRide(Ride ride);
 }

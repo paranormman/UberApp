@@ -3,10 +3,7 @@ package com.vestachrono.project.uber.uberApp.services.Implementation;
 import com.vestachrono.project.uber.uberApp.dto.DriverDto;
 import com.vestachrono.project.uber.uberApp.dto.RideDto;
 import com.vestachrono.project.uber.uberApp.dto.RiderDto;
-import com.vestachrono.project.uber.uberApp.entities.Driver;
-import com.vestachrono.project.uber.uberApp.entities.Ride;
-import com.vestachrono.project.uber.uberApp.entities.RideRequest;
-import com.vestachrono.project.uber.uberApp.entities.Rider;
+import com.vestachrono.project.uber.uberApp.entities.*;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideStatus;
 import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException;
@@ -85,6 +82,8 @@ public class DriverServiceImpl implements DriverService {
 
 //        Create a payment object
         paymentService.createNewPayment(savedRide);
+//        Create a rating object
+        ratingService.createNewRating(savedRide);
 
 //        return the ride profile by mapping it to RideDto
         return modelMapper.map(savedRide, RideDto.class);
@@ -144,15 +143,20 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public RiderDto rateRider(Long rideId, Integer rating) {
-//        get the rider assigned to the ride
-//        Rider rider = rideService.getRideById(ride.getRider().getId()).getRider();
-//
-//        double riderAverageRating = ratingService.calculateAverageRiderRating(rider, rating);
-//
-//        ratingService.updateRating(ride, riderAverageRating);
-//
-//        return modelMapper.map(riderAverageRating, RideDto.class);
-        return null;
+//        get the ride
+        Ride ride = rideService.getRideById(rideId);
+//        get current driver
+        Driver driver = getCurrentDriver();
+//        check if the driver owns the ride
+        if (!driver.equals(ride.getDriver())) {
+            throw new RuntimeException("Driver is not the owner of the ride");
+        }
+//        check if the ride status is ended to rate the rider
+        if (!ride.getRideStatus().equals(RideStatus.ENDED)) {
+            throw new RuntimeException("Ride is not ended, Cannot rate the rider, status: " +ride.getRideStatus());
+        }
+//        provide rating to the rider
+        return ratingService.rateRider(ride, rating);
     }
 
     @Override

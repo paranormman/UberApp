@@ -54,7 +54,7 @@ public class WalletServiceImpl implements WalletService {
 //        set the balance by deducting the amount from drivers wallet
         wallet.setBalance(wallet.getBalance() - amount);
 
-//        Create a Transactional object
+//        Create a Wallet Transactional object
         WalletTransaction walletTransaction = WalletTransaction.builder()
                 .transactionId(transactionId)
                 .ride(ride)

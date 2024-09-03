@@ -36,11 +36,16 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public Ride createNewRide(RideRequest rideRequest, Driver driver) {
+//        set the rideRequest status to confirmed
         rideRequest.setRideRequestStatus(RideRequestStatus.CONFIRMED);
 
+//        get the ride from rideDTO and map it ride entity
         Ride ride = modelMapper.map(rideRequest, Ride.class);
+//        set the ride status to confirmed
         ride.setRideStatus(RideStatus.CONFIRMED);
+//        Set the driver to the ride
         ride.setDriver(driver);
+//        set a random otp to the ride for authentication
         ride.setOtp(generateRandomOTP());
         ride.setId(null);
 

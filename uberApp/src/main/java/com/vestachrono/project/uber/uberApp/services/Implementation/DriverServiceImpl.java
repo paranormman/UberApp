@@ -2,17 +2,18 @@ package com.vestachrono.project.uber.uberApp.services.Implementation;
 
 import com.vestachrono.project.uber.uberApp.dto.DriverDto;
 import com.vestachrono.project.uber.uberApp.dto.RideDto;
+import com.vestachrono.project.uber.uberApp.dto.RiderDto;
 import com.vestachrono.project.uber.uberApp.entities.Driver;
 import com.vestachrono.project.uber.uberApp.entities.Ride;
 import com.vestachrono.project.uber.uberApp.entities.RideRequest;
+import com.vestachrono.project.uber.uberApp.entities.Rider;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideRequestStatus;
 import com.vestachrono.project.uber.uberApp.entities.enums.RideStatus;
 import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException;
 import com.vestachrono.project.uber.uberApp.repositories.DriverRepository;
-import com.vestachrono.project.uber.uberApp.services.DriverService;
-import com.vestachrono.project.uber.uberApp.services.PaymentService;
-import com.vestachrono.project.uber.uberApp.services.RideRequestService;
-import com.vestachrono.project.uber.uberApp.services.RideService;
+import com.vestachrono.project.uber.uberApp.repositories.RatingRepository;
+import com.vestachrono.project.uber.uberApp.repositories.RiderRepository;
+import com.vestachrono.project.uber.uberApp.services.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,8 @@ public class DriverServiceImpl implements DriverService {
     private final RideService rideService;
     private final ModelMapper modelMapper;
     private final PaymentService paymentService;
+    private final RatingService ratingService;
+
 
     @Override
     @Transactional
@@ -140,7 +143,15 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public RideDto rateRider(Long rideId, Integer rating) {
+    public RiderDto rateRider(Long rideId, Integer rating) {
+//        get the rider assigned to the ride
+//        Rider rider = rideService.getRideById(ride.getRider().getId()).getRider();
+//
+//        double riderAverageRating = ratingService.calculateAverageRiderRating(rider, rating);
+//
+//        ratingService.updateRating(ride, riderAverageRating);
+//
+//        return modelMapper.map(riderAverageRating, RideDto.class);
         return null;
     }
 
@@ -174,6 +185,11 @@ public class DriverServiceImpl implements DriverService {
 //        update the available status
         driver.setAvailable(available);
 //        save the driver in the repository
+        return driverRepository.save(driver);
+    }
+
+    @Override
+    public Driver createNewDriver(Driver driver) {
         return driverRepository.save(driver);
     }
 }

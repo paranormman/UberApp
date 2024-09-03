@@ -2,7 +2,9 @@ package com.vestachrono.project.uber.uberApp.services;
 
 import com.vestachrono.project.uber.uberApp.dto.DriverDto;
 import com.vestachrono.project.uber.uberApp.dto.RideDto;
+import com.vestachrono.project.uber.uberApp.dto.RiderDto;
 import com.vestachrono.project.uber.uberApp.entities.Driver;
+import com.vestachrono.project.uber.uberApp.entities.Ride;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -18,7 +20,7 @@ public interface DriverService {
 
     RideDto endRide(Long rideId);
 
-    RideDto rateRider(Long rideId, Integer rating);
+    RiderDto rateRider(Long rideId, Integer rating);
 
     DriverDto getMyProfile();
 
@@ -27,5 +29,7 @@ public interface DriverService {
     Driver getCurrentDriver();
 
     Driver updateDriverAvailability(Driver driver, boolean available);
+
+    Driver createNewDriver(Driver driver);
 
 }

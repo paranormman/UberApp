@@ -9,18 +9,23 @@ import com.vestachrono.project.uber.uberApp.entities.enums.Role;
 import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException;
 import com.vestachrono.project.uber.uberApp.exceptions.RuntimeConflictException;
 import com.vestachrono.project.uber.uberApp.repositories.UserRepository;
+import com.vestachrono.project.uber.uberApp.security.JWTService;
 import com.vestachrono.project.uber.uberApp.services.AuthService;
 import com.vestachrono.project.uber.uberApp.services.DriverService;
 import com.vestachrono.project.uber.uberApp.services.RiderService;
 import com.vestachrono.project.uber.uberApp.services.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
-import static com.vestachrono.project.uber.uberApp.entities.enums.Role.DRIVER;
+import static com.vestachrono.project.uber.uberApp.entities.enums.Role.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +36,27 @@ public class AuthServiceImpl implements AuthService {
     private final RiderService riderService;
     private final WalletService walletService;
     private final DriverService driverService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
+
 
     @Override
-    public String login(String email, String password) {
-        return "";
+    public String[] login(String email, String password) {
+//        sending the user details for the filter chain to authenticate the user
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+//        get the authenticated user
+        User user = (User) authentication.getPrincipal();
+
+//        create an accessToken for the authenticated user
+        String accessToken = jwtService.generateAccessToken(user);
+//        create refreshToken for the authenticated user
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+//        return both accessToken and refreshToken
+        return new String[] {accessToken, refreshToken};
     }
 
     @Override
@@ -46,7 +68,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User mappedUser = modelMapper.map(signupDto, User.class);
-        mappedUser.setRoles(Set.of(Role.RIDER));
+//        Set the roles to the User
+        mappedUser.setRoles(Set.of(RIDER));
+//        encode the password before saving the user
+        mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
+//        save the user in the repo
         User savedUser = userRepository.save(mappedUser);
 
 //        Create user related entities

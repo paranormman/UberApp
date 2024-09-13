@@ -9,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/auth")
@@ -41,4 +44,18 @@ public class AuthController {
 
         return ResponseEntity.ok(new LoginResponseDto(tokens[0]));
     }
+
+    @PostMapping("/refresh")
+    ResponseEntity<LoginResponseDto> refresh(HttpServletRequest request) {
+        String refreshToken = Arrays.stream(request.getCookies())
+                .filter(cookie -> "refrehToken".equals(cookie.getName()))
+                .findFirst()
+                .map(cookie -> cookie.getValue())
+                .orElseThrow(() -> new AuthenticationServiceException("Refresh Token not found in the cookies"));
+
+        String accessToken = authService.refreshToken(refreshToken);
+
+        return ResponseEntity.ok(new LoginResponseDto(accessToken));
+    }
+
 }

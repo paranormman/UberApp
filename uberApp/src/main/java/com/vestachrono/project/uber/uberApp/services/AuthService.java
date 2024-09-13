@@ -1,6 +1,7 @@
 package com.vestachrono.project.uber.uberApp.services;
 
 import com.vestachrono.project.uber.uberApp.dto.DriverDto;
+import com.vestachrono.project.uber.uberApp.dto.LoginResponseDto;
 import com.vestachrono.project.uber.uberApp.dto.SignupDto;
 import com.vestachrono.project.uber.uberApp.dto.UserDto;
 
@@ -12,4 +13,5 @@ public interface AuthService {
 
     DriverDto onboardNewDriver(Long userId, String vehicleId);
 
+    String refreshToken(String refreshToken);
 }

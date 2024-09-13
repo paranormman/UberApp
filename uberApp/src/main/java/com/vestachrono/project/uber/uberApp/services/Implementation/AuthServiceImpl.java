@@ -1,6 +1,7 @@
 package com.vestachrono.project.uber.uberApp.services.Implementation;
 
 import com.vestachrono.project.uber.uberApp.dto.DriverDto;
+import com.vestachrono.project.uber.uberApp.dto.LoginResponseDto;
 import com.vestachrono.project.uber.uberApp.dto.SignupDto;
 import com.vestachrono.project.uber.uberApp.dto.UserDto;
 import com.vestachrono.project.uber.uberApp.entities.Driver;
@@ -10,10 +11,7 @@ import com.vestachrono.project.uber.uberApp.exceptions.ResourceNotFoundException
 import com.vestachrono.project.uber.uberApp.exceptions.RuntimeConflictException;
 import com.vestachrono.project.uber.uberApp.repositories.UserRepository;
 import com.vestachrono.project.uber.uberApp.security.JWTService;
-import com.vestachrono.project.uber.uberApp.services.AuthService;
-import com.vestachrono.project.uber.uberApp.services.DriverService;
-import com.vestachrono.project.uber.uberApp.services.RiderService;
-import com.vestachrono.project.uber.uberApp.services.WalletService;
+import com.vestachrono.project.uber.uberApp.services.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -107,5 +105,15 @@ public class AuthServiceImpl implements AuthService {
         Driver savedDriver = driverService.createNewDriver(createDriver);
 //        return the saved driver as Dto
         return modelMapper.map(savedDriver, DriverDto.class);
+    }
+
+    @Override
+    public String refreshToken(String refreshToken) {
+//        get userId from the refreshToken
+        Long userId = jwtService.getUserIdFromToken(refreshToken);
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with Id:" + userId));
+
+       return jwtService.generateAccessToken(user);
     }
 }
